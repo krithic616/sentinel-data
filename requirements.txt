@@ -1,0 +1,9 @@
+pandas
+numpy
+scikit-learn
+great_expectations
+google-generativeai
+python-dotenv
+requests
+joblib
+streamlit
