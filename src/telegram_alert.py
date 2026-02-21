@@ -19,25 +19,25 @@ def format_table(df):
     if df is None or df.empty:
         return ""
 
-    # Select required columns safely
+    
     columns = ["product_id", "category", "price", "deviation_percent"]
     df = df[columns].copy()
 
-    # Format deviation
+    
     df["deviation_percent"] = df["deviation_percent"].apply(
         lambda x: f"{x:+.2f}%"
     )
 
-    # Convert all to string
+   
     df = df.astype(str)
 
-    # Calculate max column widths
+   
     col_widths = {
         col: max(df[col].map(len).max(), len(col))
         for col in df.columns
     }
 
-    # Build header
+    
     header = " | ".join(
         col.ljust(col_widths[col]) for col in df.columns
     )
@@ -46,7 +46,7 @@ def format_table(df):
         "-" * col_widths[col] for col in df.columns
     )
 
-    # Build rows
+    
     rows = []
     for _, row in df.iterrows():
         row_line = " | ".join(
@@ -69,7 +69,7 @@ def send_telegram_alert(message, anomalies_df=None):
 
     full_message = f"{message}\n\nTime: {timestamp}"
 
-    # Attach formatted table if available
+    
     if anomalies_df is not None and not anomalies_df.empty:
         full_message += format_table(anomalies_df.head(5))
 
