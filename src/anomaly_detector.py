@@ -26,9 +26,7 @@ def detect_anomalies():
     historical_df = pd.read_csv(HISTORICAL_PATH)
     daily_df = pd.read_csv(DAILY_PATH)
 
-    # ===============================
-    # Compute Historical Baseline
-    # ===============================
+   
 
     historical_means = (
         historical_df.groupby("product_id")["price"]
@@ -43,15 +41,12 @@ def detect_anomalies():
         how="left"
     )
 
-    # Safe fill (no chained assignment warning)
+    
     daily_df["historical_mean"] = daily_df["historical_mean"].fillna(
         daily_df["price"]
     )
 
-    # ===============================
-    # Isolation Forest Model
-    # ===============================
-
+   
     model = IsolationForest(
         contamination=0.02,
         random_state=42
@@ -63,9 +58,7 @@ def detect_anomalies():
 
     anomalies = daily_df[daily_df["anomaly_flag"] == -1].copy()
 
-    # ===============================
-    # Deviation Calculation
-    # ===============================
+ 
 
     if not anomalies.empty:
         anomalies["deviation_percent"] = (
