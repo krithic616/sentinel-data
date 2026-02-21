@@ -4,27 +4,19 @@ import numpy as np
 from datetime import datetime
 from dotenv import load_dotenv
 
-# ===============================
-# Load Environment Variables
-# ===============================
+
 
 load_dotenv()
 
-# ===============================
-# Configuration
-# ===============================
 
 DATA_DIR = "data"
 DATA_PATH = os.path.join(DATA_DIR, "historical_prices.csv")
 DAILY_PATH = os.path.join(DATA_DIR, "daily_prices.csv")
 
-# Production control via .env
+
 PRODUCTION_MODE = os.getenv("PRODUCTION_MODE", "false").lower() == "true"
 
 
-# ===============================
-# Historical Baseline Generator
-# ===============================
 
 def create_historical_data(num_products=500):
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -57,9 +49,6 @@ def create_historical_data(num_products=500):
     print("Historical data created successfully.")
 
 
-# ===============================
-# Daily Snapshot Generator
-# ===============================
 
 def generate_daily_data(anomaly_probability=0.02):
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -71,16 +60,13 @@ def generate_daily_data(anomaly_probability=0.02):
 
     df = pd.read_csv(DATA_PATH)
 
-    # Natural market variation
+    
     df["price"] = df["price"] * np.random.normal(1.0, 0.02, len(df))
     df["competitor_price"] = df["competitor_price"] * np.random.normal(1.0, 0.02, len(df))
     df["date"] = datetime.today().strftime("%Y-%m-%d")
 
-    num_anomalies = 0  # Always define safely
+    num_anomalies = 0  
 
-    # ===============================
-    # Anomaly Injection (Test Mode Only)
-    # ===============================
     if not PRODUCTION_MODE:
         num_anomalies = int(len(df) * anomaly_probability)
 
@@ -103,10 +89,6 @@ def generate_daily_data(anomaly_probability=0.02):
 
     df.to_csv(DAILY_PATH, index=False)
 
-
-# ===============================
-# Script Entry
-# ===============================
 
 if __name__ == "__main__":
     create_historical_data()
