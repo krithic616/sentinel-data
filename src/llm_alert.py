@@ -19,13 +19,13 @@ def generate_alert_summary(anomalies_df: pd.DataFrame):
 
     timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
-    # Compute deviation %
+    
     anomalies_df["price_deviation_pct"] = (
         (anomalies_df["price"] - anomalies_df["historical_mean"]) 
         / anomalies_df["historical_mean"]
     ) * 100
 
-    # Sort by absolute deviation
+    
     anomalies_df["abs_deviation"] = anomalies_df["price_deviation_pct"].abs()
     top_anomalies = anomalies_df.sort_values(
         by="abs_deviation", ascending=False
@@ -63,7 +63,7 @@ Keep it under 4 sentences.
         return response.text.strip()
 
     except Exception:
-        # Fallback deterministic message if LLM fails
+        
         return (
             f"{len(anomalies_df)} pricing anomalies detected at {timestamp}. "
             f"Top deviations:\n{structured_context}"
