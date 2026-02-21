@@ -15,16 +15,10 @@ def run_pipeline():
     logger.info("Pipeline started", extra={"stage": "startup"})
 
     try:
-        # ==============================
-        # Stage 1 — Data Generation
-        # ==============================
         create_historical_data()
         generate_daily_data()
         logger.info("Data generation completed", extra={"stage": "ingestion"})
 
-        # ==============================
-        # Stage 2 — Deterministic Validation
-        # ==============================
         validation_passed = validate_daily_data()
 
         if not validation_passed:
@@ -39,18 +33,14 @@ def run_pipeline():
 
         logger.info("Validation passed", extra={"stage": "validation"})
 
-        # ==============================
-        # Stage 3 — ML Anomaly Detection
-        # ==============================
         flag, anomalies_df = detect_anomalies()
 
         if flag:
             logger.warning("Anomalies detected", extra={"stage": "ml_detection"})
 
-            # Generate enterprise summary
+            
             summary = generate_alert_summary(anomalies_df)
 
-            # Send both summary + formatted table
             send_telegram_alert(summary, anomalies_df)
 
         else:
