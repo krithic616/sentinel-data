@@ -27,7 +27,7 @@ def get_logger():
     logger = logging.getLogger("sentinel_logger")
     logger.setLevel(logging.INFO)
 
-    # Prevent duplicate handlers
+    
     if logger.handlers:
         return logger
 
